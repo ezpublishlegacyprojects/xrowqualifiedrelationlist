@@ -1360,8 +1360,16 @@ class xrowQualifiedRelationlistType extends eZDataType
                     $attributeValue = $relationItem->hasAttribute( $attributeXMLName ) ? $relationItem->getAttribute( $attributeXMLName ) : false;
                     $hash[$attributeKey] = $attributeValue;
                 }
+                if ( $hash['qualifier'] === false )
+                {
+                	$hash['qualifier'] = eZINI::instance( 'xrowqualifiedrelationlist.ini' )->variable( 'Settings', 'Default' );
+                }
                 $content['relation_list'][] = $hash;
             }
+        }
+        foreach( $content['relation_list'] as $hash )
+        {
+        	$content['qualified_list'][$hash['qualifier']][] = $hash; 
         }
         return $content;
     }
