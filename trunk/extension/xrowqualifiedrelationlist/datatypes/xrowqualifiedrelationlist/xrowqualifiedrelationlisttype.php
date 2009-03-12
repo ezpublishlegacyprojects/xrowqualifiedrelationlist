@@ -167,7 +167,7 @@ class xrowQualifiedRelationlistType extends eZDataType
                 if ( !is_numeric( $objectID ) )
                 {
                     eZDebug::writeError( "Related object ID (objectID): '$objectID', is not a numeric value.",
-                                         "eZObjectRelationListType::fetchObjectAttributeHTTPInput" );
+                                         "xrowQualifiedRelationlistType::fetchObjectAttributeHTTPInput" );
 
                     continue;
                 }
@@ -256,7 +256,7 @@ class xrowQualifiedRelationlistType extends eZDataType
         $defaultPlacementNode = ( is_array( $classContent['default_placement'] ) and isset( $classContent['default_placement']['node_id'] ) ) ? $classContent['default_placement']['node_id'] : false;
         if ( !$defaultPlacementNode )
         {
-            eZDebug::writeError( 'Default placement is missing', 'eZObjectRelationListType::createNewObject' );
+            eZDebug::writeError( 'Default placement is missing', 'xrowQualifiedRelationlistType::createNewObject' );
             return false;
         }
 
@@ -264,7 +264,7 @@ class xrowQualifiedRelationlistType extends eZDataType
         // Check if current user can create a new node as child of this node.
         if ( !$node or !$node->canCreate() )
         {
-            eZDebug::writeError( 'Default placement is wrong or the current user can\'t create a new node as child of this node.', 'eZObjectRelationListType::createNewObject' );
+            eZDebug::writeError( 'Default placement is wrong or the current user can\'t create a new node as child of this node.', 'xrowQualifiedRelationlistType::createNewObject' );
             return false;
         }
 
@@ -281,7 +281,7 @@ class xrowQualifiedRelationlistType extends eZDataType
         }
         if ( !$canCreate )
         {
-            eZDebug::writeError( 'The current user is not allowed to create objects of class (ID=' . $classID . ')', 'eZObjectRelationListType::createNewObject' );
+            eZDebug::writeError( 'The current user is not allowed to create objects of class (ID=' . $classID . ')', 'xrowQualifiedRelationlistType::createNewObject' );
             return false;
         }
 
@@ -379,7 +379,7 @@ class xrowQualifiedRelationlistType extends eZDataType
                 }
             }
         }
-        return eZObjectRelationListType::storeObjectAttributeContent( $attribute, $content );
+        return xrowQualifiedRelationlistType::storeObjectAttributeContent( $attribute, $content );
     }
 
     function onPublish( $contentObjectAttribute, $contentObject, $publishedNodes )
@@ -451,7 +451,7 @@ class xrowQualifiedRelationlistType extends eZDataType
                 $content['relation_list'][$key]['is_modified'] = false;
             }
         }
-        eZObjectRelationListType::storeObjectAttributeContent( $contentObjectAttribute, $content );
+        xrowQualifiedRelationlistType::storeObjectAttributeContent( $contentObjectAttribute, $content );
         $contentObjectAttribute->setContent( $content );
         $contentObjectAttribute->store();
     }
@@ -472,7 +472,7 @@ class xrowQualifiedRelationlistType extends eZDataType
 
             if ( $contentObjectID != $originalContentObjectID )
             {
-                $classContent = eZObjectRelationListType::defaultClassAttributeContent();
+                $classContent = xrowQualifiedRelationlistType::defaultClassAttributeContent();
                 if ( !$classContent['default_placement'] )
                 {
                     $content = $originalContentObjectAttribute->content();
@@ -587,15 +587,15 @@ class xrowQualifiedRelationlistType extends eZDataType
         $xmlText = $classAttribute->attribute( 'data_text5' );
         if ( trim( $xmlText ) == '' )
         {
-            $content = eZObjectRelationListType::defaultClassAttributeContent();
-            return eZObjectRelationListType::storeClassAttributeContent( $classAttribute, $content );
+            $content = xrowQualifiedRelationlistType::defaultClassAttributeContent();
+            return xrowQualifiedRelationlistType::storeClassAttributeContent( $classAttribute, $content );
         }
     }
 
     function preStoreClassAttribute( $classAttribute, $version )
     {
         $content = $classAttribute->content();
-        return eZObjectRelationListType::storeClassAttributeContent( $classAttribute, $content );
+        return xrowQualifiedRelationlistType::storeClassAttributeContent( $classAttribute, $content );
     }
 
     function storeClassAttributeContent( $classAttribute, $content )
@@ -609,7 +609,7 @@ class xrowQualifiedRelationlistType extends eZDataType
         return false;
     }
 
-    function storeObjectAttributeContent( $objectAttribute, $content )
+    static function storeObjectAttributeContent( $objectAttribute, $content )
     {
         if ( is_array( $content ) )
         {
@@ -620,13 +620,13 @@ class xrowQualifiedRelationlistType extends eZDataType
         return false;
     }
 
-    function storeClassDOMDocument( $doc, $classAttribute )
+    static function storeClassDOMDocument( $doc, $classAttribute )
     {
         $docText = xrowQualifiedRelationlistType::domString( $doc );
         $classAttribute->setAttribute( 'data_text5', $docText );
     }
 
-    function storeObjectDOMDocument( $doc, $objectAttribute )
+    static function storeObjectDOMDocument( $doc, $objectAttribute )
     {
         $docText = xrowQualifiedRelationlistType::domString( $doc );
         $objectAttribute->setAttribute( 'data_text', $docText );
